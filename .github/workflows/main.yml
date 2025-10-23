@@ -5,4 +5,4 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: echo message
-      - run: echo "Hello World"
+        run: echo "Hello World"
