@@ -3,7 +3,7 @@ on: push
 jobs:
   hello-world:
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ vars.ENVIRONMENT }}
     steps: 
       - name: echo message
         run: echo "Hello ${{ vars.ENVIRONMENT }}!"
