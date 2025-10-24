@@ -3,7 +3,9 @@ on: push
 jobs:
   hello-world:
     runs-on: ubuntu-latest
-    environment: ${{ vars.ENVIRONMENT }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     steps: 
       - name: echo message
         run: echo "Hello ${{ vars.ENVIRONMENT }}!"
+      - name: echo ref
+        run: echo "${{ github.ref }}"
