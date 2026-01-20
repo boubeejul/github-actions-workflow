@@ -2,37 +2,48 @@ name: CI/CD Pipeline - Checkout Service
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: ["main", "develop", "lab-4"]
 
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
+    concurrency:
+      group: staging_tests
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
+
       - run: npm install
       - run: npm run test:unit
 
+
   integration-tests:
     runs-on: ubuntu-latest
+    concurrency:
+      group: staging_tests
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
+
       - run: npm install
       - run: npm run test:integration
 
+
   build-and-deploy:
+    needs: ["unit-tests", "integration-tests"]
     runs-on: ubuntu-latest
     env:
-      DB_CONNECTION: ${{ secret.DATABASE_URL }}
+      DB_CONNECTION: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Download Code
         uses: actions/checkout@v4
@@ -43,8 +54,8 @@ jobs:
           npm run build
 
       - name: Deploy to Staging
-        if: github.ref == 'develop'
+        if: github.ref == 'main'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./output
+          publish_dir: ./dist
