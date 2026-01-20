@@ -1,23 +1,29 @@
-name: CI
+name: Node CI
 
 on:
   push:
-    branches: [ "lab-1" ]
+    branches: [ "lab-2" ]
+  pull_request:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      - uses: actions/setup-node@v3
         with:
-          python-version: "3.8"
+          node-version: 18
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-${{ runner.os }}
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: npm install
 
-      - name: Run tests
-        run: pytest
+      - name: Build
+        run: npm run build
