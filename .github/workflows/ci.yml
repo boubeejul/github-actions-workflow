@@ -1,35 +1,50 @@
-name: CI-FastShop
+name: CI/CD Pipeline - Checkout Service
 
 on:
   push:
-    branches: ["lab-3"]
-    
+    branches: [main]
+  pull_request:
+    branches: [main]
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
+      - run: npm install
+      - run: npm run test:unit
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Tests
-        run: npm test
-
-  docker-build:
-    needs: "unit-tests"
+  integration-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run test:integration
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION: ${{ secret.DATABASE_URL }}
+    steps:
+      - name: Download Code
         uses: actions/checkout@v4
 
-      - name: Build Docker Image
+      - name: Build Project
         run: |
-          docker build . -t fastshop-inventory:${{ github.sha }}
+          npm install
+          npm run build
+
+      - name: Deploy to Staging
+        if: github.ref == 'develop'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output

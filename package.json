@@ -1,11 +1,9 @@
 {
-  "name": "lab-cicd-fastshop",
+  "name": "lab-cicd-intermediate",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo 'Running unit tests...' && exit 0",
-    "build": "echo 'Building app...' && exit 0"
-  },
-  "dependencies": {
-    "express": "^4.18.2"
+    "test:unit": "echo 'Running unit tests...' && exit 0",
+    "test:integration": "echo 'Running integration tests...' && exit 0",
+    "build": "mkdir -p dist && echo 'Build successful' > dist/index.html"
   }
 }

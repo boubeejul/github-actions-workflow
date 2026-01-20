@@ -1,19 +1,23 @@
-Projeto: E-Commerce "FastShop" – Microserviço de Inventário ID: DEVOPS-442 Relator: Squad de Backend Prioridade: Alta
+Projeto: E-Commerce API (Checkout Service)
 
-Título: Automatização do Pipeline de CI e Deploy em Staging (Falhando)
+ID: DEVOPS-421
 
-Descrição: Olá, time de DevOps. Migramos o repositório do serviço de inventário para o GitHub e tentamos configurar uma Action para automatizar os testes e o build da imagem Docker. No entanto, a pipeline está quebrando e não conseguimos identificar o motivo.
+Prioridade: Alta 🔴
 
-Além disso, o PO solicitou que a imagem Docker só seja gerada se os testes passarem, e precisamos que o artefato final seja tagueado com o hash do commit para rastreabilidade.
+Relator: Tech Lead (Backend)
+
+Título: Falha crítica no pipeline de deploy para Staging
+
+Descrição: Após a migração das credenciais para o cofre de segurança e a atualização das versões de bibliotecas node, nosso pipeline de CI/CD parou de funcionar. O time de desenvolvimento não consegue visualizar o status dos testes e o deploy para o ambiente de Staging (simulado via GitHub Pages) está quebrado.
 
 Critérios de Aceite:
 
-    A pipeline deve rodar em todo push para a branch main.
+    O pipeline deve rodar automaticamente em cada push para a branch main ou develop.
 
-    Deve executar testes unitários (Node.js).
+    A etapa de Testes deve rodar em paralelo para ganhar tempo.
 
-    Deve realizar o build da imagem Docker.
+    A etapa de Build só deve ocorrer se os testes passarem.
 
-    Desafio: Corrigir os erros de sintaxe e lógica que impedem a execução.
+    O Deploy deve ser disparado apenas na branch main.
 
-    Melhoria: Garantir que o build do Docker dependa do sucesso dos testes.
+    O pipeline deve ser capaz de lidar com as variáveis de ambiente sem expor segredos.
