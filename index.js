@@ -1,1 +1,1 @@
-console.log("Aplicação iniciada");
+console.log("Aplicação iniciada, teste");
